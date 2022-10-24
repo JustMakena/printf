@@ -1,53 +1,73 @@
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "main.h"
-#include <stddef.h>
+#include <stdio.h>
 
 /**
-* _printf - recreates the printf function
-* @format: string with format specifier
-* Return: number of characters printed
+* _printf - produces output according to a format
+* @format: a character string composed of zero or more directives
+*
+* Return: length of output
 */
 
 int _printf(const char *format, ...)
 {
-if (format != NULL)
-{
-int count = 0, i;
-int (*m)(va_list);
 va_list args;
+prints specifier[] = {
+{"c", print_char},
+{"i", print_int},
+{"d", print_int},
+{"s", print_string},
+{"b", print_dec_binary},
+{"u", print_unsigned_int},
+{"o", print_octal},
+{"x", print_hex},
+{"X", print_HEX},
+{'\0', NULL}
+};
+int i = 0, j = 0;
+int len_spec;
+int size = 0;
 va_start(args, format);
-i = 0;
-if (format[0] == '%' && format[1] == '\0')
+len_spec = sizeof(specifier) / sizeof(specifier[0]);
+len_spec -= 1;
+if (format == NULL)
 return (-1);
-while (format != NULL && format[i] != '\0')
+while (*(format + i) != '\0')
 {
-if (format[i] == '%')
+j = 0;
+if (*(format + i) == '%')
+{	  
+i += 1;
+while (j < len_spec &&
+format[i] != (specifier[j].symbol[0]))
+j++;
+if (*(format + i) == '\0')
+return (-1);
+else if (*(format + i) == '%')
 {
-if (format[i + 1] == '%')
+_putchar('%');
+size += 1;
+i += 1;
+}
+else if (j < len_spec)
 {
-count += _putchar(format[i]);
-i += 2;
+size += specifier[j].print(args);
+i += 1;
 }
 else
 {
-m = get_func(format[i + 1]);
-if (m)
-count += m(args);
-else
-count = _putchar(format[i]) + _putchar(format[i + 1]);
-i += 2;
+_putchar('%');
+_putchar(*(format + i));
+size += 1;
+i += 1;
 }
 }
 else
 {
-count += _putchar(format[i]);
-i++;
+_putchar(*(format + i));
+size += 1;
+i += 1;
 }
 }
 va_end(args);
-return (count);
-}
-return (-1);
+return (size);
 }
