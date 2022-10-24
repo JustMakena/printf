@@ -1,7 +1,5 @@
 #include "main.h"
 
-
-
 /**
 * print_hxdc - prints hexadecimal conversion of integer
 * @a: unsigned integer
@@ -10,11 +8,13 @@
 */
 
 int print_hxdc(unsigned int a, unsigned int c)
+
 {
 unsigned int a[8];
 unsigned int i, m, sum;
 char diff;
 int count;
+
 m = 268435456; /* (16 ^ 7) */
 if (c)
 diff = 'A' - ':';
