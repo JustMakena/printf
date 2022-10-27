@@ -1,73 +1,37 @@
 #include "main.h"
-#include <stdio.h>
 
 /**
-* _printf - produces output according to a format
-* @format: a character string composed of zero or more directives
-*
-* Return: length of output
+* _printf - Receives the main string and all the necessary parameters to
+* print a formated string
+* @format: A string containing all the desired characters
+* Return: A total count of the characters printed
 */
-
 int _printf(const char *format, ...)
 {
-va_list args;
-prints specifier[] = {
+int printed_chars;
+conver_t f_list[] = {
 {"c", print_char},
-{"i", print_int},
-{"d", print_int},
 {"s", print_string},
-{"b", print_dec_binary},
-{"u", print_unsigned_int},
+{"%", print_percent},
+{"d", print_integer},
+{"i", print_integer},
+{"b", print_binary},
+{"r", print_reversed},
+{"R", rot13},
+{"u", unsigned_integer},
 {"o", print_octal},
 {"x", print_hex},
-{"X", print_HEX},
-{'\0', NULL}
+{"X", print_heX},
+{NULL, NULL}
 };
-int i = 0, j = 0;
-int len_spec;
-int size = 0;
-va_start(args, format);
-len_spec = sizeof(specifier) / sizeof(specifier[0]);
-len_spec -= 1;
+va_list arg_list;
+
 if (format == NULL)
 return (-1);
-while (*(format + i) != '\0')
-{
-j = 0;
-if (*(format + i) == '%')
-{	  
-i += 1;
-while (j < len_spec &&
-format[i] != (specifier[j].symbol[0]))
-j++;
-if (*(format + i) == '\0')
-return (-1);
-else if (*(format + i) == '%')
-{
-_putchar('%');
-size += 1;
-i += 1;
-}
-else if (j < len_spec)
-{
-size += specifier[j].print(args);
-i += 1;
-}
-else
-{
-_putchar('%');
-_putchar(*(format + i));
-size += 1;
-i += 1;
-}
-}
-else
-{
-_putchar(*(format + i));
-size += 1;
-i += 1;
-}
-}
-va_end(args);
-return (size);
+
+va_start(arg_list, format);
+/*Calling parser function*/
+printed_chars = parser(format, f_list, arg_list);
+va_end(arg_list);
+return (printed_chars);
 }

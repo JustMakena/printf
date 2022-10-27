@@ -1,30 +1,46 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef PRINT_F
+#define PRINT_F
+
+#include <unistd.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <stdarg.h>
 
 /**
-* struct printer - A new struct type defining a printer.
-* @symbol: A symbol representing a data type.
-* @print: A function pointer to a function that prints
-*         a data type corresponding to symbol.
+* struct convert - defines a structure for symbols and functions
+*
+* @sym: The operator
+* @f: The function associated
 */
-
-typedef struct printer
+struct convert
 {
-char *symbol;
-int (*print)(va_list args);
-} prints;
+char *sym;
+int (*f)(va_list);
+};
+typedef struct convert conver_t;
 
-int _putchar(char c);
+/*Main functions*/
+int parser(const char *format, conver_t f_list[], va_list arg_list);
 int _printf(const char *format, ...);
-int print_char(va_list args);
-int print_int(va_list args);
-int print_unsigned_int(va_list args);
-int print_dec_binary(va_list args);
-int print_string(va_list args);
-int print_hex(va_list args);
-int print_HEX(va_list args);
-int print_octal(va_list args);
+int _write_char(char);
+int print_char(va_list);
+int print_string(va_list);
+int print_percent(va_list);
+int print_integer(va_list);
+int print_number(va_list);
+int print_binary(va_list);
+int print_reversed(va_list arg);
+int rot13(va_list);
+int unsigned_integer(va_list);
+int print_octal(va_list list);
+int print_hex(va_list list);
+int print_heX(va_list list);
+
+/*Helper functions*/
+unsigned int base_len(unsigned int, int);
+char *rev_string(char *);
+void write_base(char *str);
+char *_memcpy(char *dest, char *src, unsigned int n);
+int print_unsgined_number(unsigned int);
+
+
 #endif
